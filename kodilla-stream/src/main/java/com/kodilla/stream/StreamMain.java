@@ -1,34 +1,24 @@
 package com.kodilla.stream;
 
-import com.kodilla.stream.beautifier.PoemBeautifier;
-import com.kodilla.stream.beautifier.SignBetween;
-import com.kodilla.stream.iterate.NumbersGenerator;
-import com.kodilla.stream.lambda.ExpressionExecutor;
-import com.kodilla.stream.reference.FunctionalCalculator;
+import com.kodilla.stream.forumuser.Forum;
+import com.kodilla.stream.forumuser.ForumUser;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StreamMain {
-
     public static void main(String[] args) {
-        ExpressionExecutor expressionExecutor = new ExpressionExecutor();
 
-        expressionExecutor.executeExpression(10, 5, (a, b) -> a + b);
-        expressionExecutor.executeExpression(10, 5, (a, b) -> a - b);
-        expressionExecutor.executeExpression(10, 5, (a, b) -> a * b);
-        expressionExecutor.executeExpression(10, 5, (a, b) -> a / b);
+        Forum forum = new Forum();
+        Map<Integer, ForumUser> forumUser = forum.getUserList().stream()
 
-        System.out.println("Calculating expressions with method references");
-        expressionExecutor.executeExpression(3, 4, FunctionalCalculator::multiplyAByB);
-        expressionExecutor.executeExpression(3, 4, FunctionalCalculator::addAToB);
-        expressionExecutor.executeExpression(3, 4, FunctionalCalculator::subBFromA);
-        expressionExecutor.executeExpression(3, 4, FunctionalCalculator::divideAByB);
+                .filter(ForumUser -> ForumUser.getSex() == 'M')
+                .filter(ForumUser -> ForumUser.getAge() > 20)
+                .filter(ForumUser -> ForumUser.getPostsList() >= 1)
+                .collect(Collectors.toMap(ForumUser::getIdUser, ForumUser -> ForumUser));
 
-        PoemBeautifier poemBeautifier = new PoemBeautifier();
-        poemBeautifier.beautify("Kodilla", text -> "ABC " + text + " ABC");
-        poemBeautifier.beautify("Kodilla", text -> text.toUpperCase());
-        poemBeautifier.beautify("Kodilla", text -> text + " " + text);
-        poemBeautifier.beautify("Kodilla", SignBetween::signBetween);
-
-        System.out.println("Using Stream to generate even numbers from 1 to 20");
-        NumbersGenerator.generateEven(20);
+        forumUser.entrySet().stream()
+                .map(entry -> entry.getKey() + " " + entry.getValue())
+                .forEach(System.out::println);
     }
 }
