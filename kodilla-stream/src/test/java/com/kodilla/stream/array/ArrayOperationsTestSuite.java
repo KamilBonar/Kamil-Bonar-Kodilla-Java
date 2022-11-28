@@ -14,9 +14,9 @@ public class ArrayOperationsTestSuite {
             test[i] = i +2;
         }
         //When
-        OptionalDouble average = ArrayOperations.getAverage(test);
+        double average = ArrayOperations.getAverage(test);
         //Then
-        Assertions.assertEquals(11.5, average.getAsDouble(),0.001);
+        Assertions.assertEquals(11.5, average);
 
     }
 }
