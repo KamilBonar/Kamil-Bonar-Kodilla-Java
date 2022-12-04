@@ -21,7 +21,8 @@ public class RoutRunner {
             findFlight.findFlight(flight);
 
         } catch (RouteNotFoundException e) {
-            System.out.println("Airport closed.");
+            System.out.println(e);
         }
+        System.out.println("End of the program.");
     }
 }

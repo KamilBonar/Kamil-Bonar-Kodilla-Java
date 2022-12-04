@@ -12,16 +12,22 @@ public class FindFlight {
 
     public void findFlight(Flight flight) throws RouteNotFoundException {
 
+        if (!airports.containsKey(flight.getDepartureAirport()) ||
+                !airports.containsKey(flight.getArrivalAirport())) {
+
+            throw new RouteNotFoundException("Not in the database");
+        }
+
         if (airports.get(flight.getDepartureAirport())) {
             System.out.println("You can start.");
         } else {
-            throw new RouteNotFoundException();
+            throw new RouteNotFoundException("Airport closed.");
         }
 
         if (airports.get(flight.getArrivalAirport())) {
             System.out.println("You can land.");
         } else {
-            throw new RouteNotFoundException();
+            throw new RouteNotFoundException("Airport closed.");
         }
 
     }
