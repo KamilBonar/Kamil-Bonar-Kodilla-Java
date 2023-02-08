@@ -6,6 +6,18 @@ import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "Company.retrieveCompaniesByFragmentOfTheName",
+                query = "FROM Company WHERE substring(name,1, 3) = :FRAGMENT_OF_THE_NAME"
+        ),
+
+        @NamedQuery(
+                name = "Company.retrieveCompaniesByAnyFragmentOfTheName",
+                query = "FROM Company WHERE name LIKE concat('%',:ARG, '%')"
+
+        )
+})
 @Entity
 @Table(name = "COMPANIES")
 public class Company {
