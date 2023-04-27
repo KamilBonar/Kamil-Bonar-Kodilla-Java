@@ -2,22 +2,26 @@ package com.kodilla.kodillahibernate.manytomany;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.NamedNativeQuery;
+import org.hibernate.annotations.NamedQuery;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@NamedQueries({
-        @NamedQuery(
-                name = "Company.retrieveCompaniesByFragmentOfTheName",
-                query = "FROM Company WHERE substring(name,1, 3) = :FRAGMENT_OF_THE_NAME"
-        ),
+@NamedNativeQuery(
+        name = "Company.retrieveCompaniesWithGivenThreeFirstLetters",
+        query = "SELECT * FROM COMPANIES" +
+                " WHERE LEFT(COMPANY_NAME,3) = 'Sof'",
+        resultClass = Company.class
+)
 
-        @NamedQuery(
-                name = "Company.retrieveCompaniesByAnyFragmentOfTheName",
-                query = "FROM Company WHERE name LIKE concat('%',:ARG, '%')"
+@NamedQuery(
+        name = "Company.retrieveCompaniesByPartOfTheName",
+        query = "FROM Company WHERE name LIKE concat('%', :partOfName, '%') "
+)
 
-        )
-})
+@Service
 @Entity
 @Table(name = "COMPANIES")
 public class Company {
@@ -60,7 +64,9 @@ public class Company {
         return employees;
     }
 
-    private void setEmployees(List<Employee> employees) {
+    public void setEmployees(List<Employee> employees) {
         this.employees = employees;
     }
+
+
 }

@@ -2,19 +2,25 @@ package com.kodilla.kodillahibernate.manytomany.dao;
 
 import com.kodilla.kodillahibernate.manytomany.Company;
 import com.kodilla.kodillahibernate.manytomany.Employee;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+@Transactional
 @SpringBootTest
-class CompanyDaoTestSuite {
+public class CompanyDaoTestSuite {
 
     @Autowired
     private CompanyDao companyDao;
+
+    @Autowired
+    private EmployeeDao employeeDao;
 
     @Test
     void testSaveManyToMany() {
@@ -62,9 +68,9 @@ class CompanyDaoTestSuite {
         }
     }
 
-    @Test
-    void testNamedQueries() {
 
+    @Test
+    void testNamedQueries(){
         //Given
         Employee johnSmith = new Employee("John", "Smith");
         Employee stephanieClarckson = new Employee("Stephanie", "Clarckson");
@@ -86,7 +92,6 @@ class CompanyDaoTestSuite {
         lindaKovalsky.getCompanies().add(dataMaesters);
         lindaKovalsky.getCompanies().add(greyMatter);
 
-        //When
         companyDao.save(softwareMachine);
         int softwareMachineId = softwareMachine.getId();
         companyDao.save(dataMaesters);
@@ -94,18 +99,29 @@ class CompanyDaoTestSuite {
         companyDao.save(greyMatter);
         int greyMatterId = greyMatter.getId();
 
-        List<Company> companies = companyDao.retrieveCompaniesByFragmentOfTheName("Dat");
+        employeeDao.save(johnSmith);
+        int johnSmithId = johnSmith.getId();
+        employeeDao.save(stephanieClarckson);
+        int stephanieClarcksonId = stephanieClarckson.getId();
+        employeeDao.save(lindaKovalsky);
+        int lindaKovalskyId = lindaKovalsky.getId();
 
-        //Then
+        //When
+        List<Company> companiesByLetters = companyDao.retrieveCompaniesWithGivenThreeFirstLetters();
+        List<Employee> employeesByLastname = employeeDao.retrieveEmployeesWithTheGivenLastname("Smith");
 
-        assertEquals(1, companies.size());
         try {
+            assertEquals(1, companiesByLetters.size());
+            assertEquals(1, employeesByLastname.size());
+
+        } finally {
             //CleanUp
-            companyDao.deleteById(softwareMachineId);
+           /* companyDao.deleteById(softwareMachineId);
             companyDao.deleteById(dataMaestersId);
             companyDao.deleteById(greyMatterId);
-
-        } catch (Exception e) {
+            employeeDao.deleteById(johnSmithId);
+            employeeDao.deleteById(stephanieClarcksonId);
+            employeeDao.deleteById(lindaKovalskyId);*/
         }
     }
 }

@@ -2,6 +2,7 @@ package com.kodilla.kodillahibernate.tasklist.dao;
 
 import com.kodilla.kodillahibernate.task.Task;
 import com.kodilla.kodillahibernate.task.TaskFinancialDetails;
+import com.kodilla.kodillahibernate.task.dao.TaskDao;
 import com.kodilla.kodillahibernate.tasklist.TaskList;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class TaskListDaoTestSuite {
     @Autowired
     private TaskListDao taskListDao;
+    @Autowired
+    private TaskDao taskDao;
     private static final String LISTNAME= "List1";
     private static final String DESCRIPTION = "Description1";
 
@@ -81,7 +84,7 @@ class TaskListDaoTestSuite {
         task3.setTaskFinancialDetails(tfd3);
         task4.setTaskFinancialDetails(tfd4);
 
-        TaskList taskList = new TaskList(TODO, "ToDo tasks");
+        TaskList taskList = new TaskList(LISTNAME, "ToDo tasks");
         taskList.getTasks().add(task1);
         taskList.getTasks().add(task2);
         taskList.getTasks().add(task3);

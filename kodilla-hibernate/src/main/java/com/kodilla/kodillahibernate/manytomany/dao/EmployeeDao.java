@@ -8,10 +8,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface EmployeeDao extends CrudRepository<Employee, Integer> {
+    @Query
+    List<Employee> retrieveEmployeesWithTheGivenLastname(@Param("LASTNAME") String lastname);
 
     @Query
-    List<Employee> retrieveEmployeesWithAGivenLastname(@Param("LASTNAME") String lastname);
+    List<Employee> retrieveEmployeeByPartOfTheLastname(@Param("partOfName") String partOfName);
 
-    @Query
-    List<Employee> retrieveEmployeesWithAGivenPartOfLastname(@Param("ARG") String partOfTheLastname);
 }

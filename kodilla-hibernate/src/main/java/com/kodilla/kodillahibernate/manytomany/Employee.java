@@ -2,21 +2,24 @@ package com.kodilla.kodillahibernate.manytomany;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @NamedQueries({
         @NamedQuery(
-                name = "Employee.retrieveEmployeesWithAGivenLastname",
+                name = "Employee.retrieveEmployeesWithTheGivenLastname",
                 query = "FROM Employee WHERE lastname = :LASTNAME"
         ),
         @NamedQuery(
-                name = "Employee.retrieveEmployeesWithAGivenPartOfLastname",
-                query = "FROM Employee WHERE lastname LIKE concat('%',:ARG, '%')"
+                name = "Employee.retrieveEmployeeByPartOfTheLastname",
+                query = "FROM Employee WHERE firstname LIKE concat('%', :partOfName, '%')" +
+                        "or lastname LIKE concat('%', :partOfName, '%') "
         )
 })
 
+@Service
 @Entity
 @Table(name = "EMPLOYEES")
 public class Employee {
@@ -67,8 +70,7 @@ public class Employee {
     }
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "JOIN_COMPANY_EMPLOYEE",
+    @JoinTable(name = "JOIN_COMPANY_EMPLOYEE",
             joinColumns = {@JoinColumn(name = "EMPLOYEE_ID", referencedColumnName = "EMPLOYEE_ID")},
             inverseJoinColumns = {@JoinColumn(name = "COMPANY_ID", referencedColumnName = "COMPANY_ID")}
     )
@@ -76,7 +78,8 @@ public class Employee {
         return companies;
     }
 
-    private void setCompanies(List<Company> companies) {
+    public void setCompanies(List<Company> companies) {
         this.companies = companies;
     }
+
 }
